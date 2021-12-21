@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!--导入properties配置文件-->
+        <context:property-placeholder location="classpath:db.properties"/>
+        <!--1. 使用第三方的连接池-->
+        <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource">
+            <property name="driverClassName" value="${db.driverClassName}"/>
+            <property name="url" value="${db.url}"/>
+            <property name="username" value="${db.username}"/>
+            <property name="password" value="${db.password}"/>
+        </bean>
+        <bean class="org.mybatis.spring.SqlSessionFactoryBean">
+            <property name="dataSource" ref="dataSource"/>
+            <!--配置别名-->
+            <property name="typeAliasesPackage" value="com.itheima"/>
+            <!--导入进来SQLMapConfig文件-->
+            <property name="configLocation" value="classpath:SqlMapConfig.xml"/>
+        </bean>
+        <!--3. 指定扫描哪个位置的dao |  mapper文件-->
+        <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+            <property name="basePackage" value="com.itheima.dao"/>
+        </bean>
+
+
+
+</beans>
